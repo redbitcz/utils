@@ -1,0 +1,25 @@
+{
+  "name": "redbitcz/utils",
+  "description": "Utils",
+  "type": "library",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Redbit s.r.o.",
+      "email": "info@redbit.cz"
+    },
+    {
+      "name": "Martin Dostál",
+      "email": "martin.dostal@redbit.cz"
+    }
+  ],
+  "require": {
+    "php": ">=7.3.0",
+    "psr/log": "^1.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Redbitcz\\Utils\\": "src/"
+    }
+  }
+}
