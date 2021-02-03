@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Redbitcz\Utils\Writer;
+namespace Redbitcz\Utils\IO;
 
 
-class OutputWriter implements IWriter
+class OutputWriter implements IOutStream
 {
     public function write(string $string): void
     {

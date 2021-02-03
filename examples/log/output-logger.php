@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Redbitcz\Utils\Log\Logger;
-use Redbitcz\Utils\Writer\OutputWriter;
+use Redbitcz\Utils\IO\OutputWriter;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 

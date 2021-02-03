@@ -7,17 +7,17 @@ namespace Redbitcz\Utils\Log;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
-use Redbitcz\Utils\Writer\IWriter;
+use Redbitcz\Utils\IO\IOutStream;
 
 class Logger implements LoggerInterface
 {
     use LoggerTrait;
 
 
-    /** @var IWriter */
+    /** @var IOutStream */
     private $writer;
 
-    public function __construct(IWriter $writer)
+    public function __construct(IOutStream $writer)
     {
         $this->writer = $writer;
     }
