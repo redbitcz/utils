@@ -13,7 +13,6 @@ class Logger implements LoggerInterface
 {
     use LoggerTrait;
 
-
     /** @var IOutStream */
     private $writer;
 

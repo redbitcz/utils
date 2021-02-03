@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Redbitcz\Utils\IO;
 
-
 class ConsoleWriter implements IOutStream
 {
     public function write(string $string): void
@@ -16,5 +15,4 @@ class ConsoleWriter implements IOutStream
     {
         fwrite(STDERR, $string);
     }
-
 }
