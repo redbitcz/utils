@@ -7,7 +7,7 @@ deploy_composer_tag:
 
 deploy_composer_branch:
   only:
-    - push
+    - branches
   stage: deploy
   script:
     - curl -sS --show-error --fail --data branch=${CI_COMMIT_REF_NAME} "https://__token__:${COMPOSER_DEPLOY_TOKEN}@gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/composer"
