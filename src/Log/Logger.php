@@ -6,7 +6,6 @@ namespace Redbitcz\Utils\Log;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
-use Psr\Log\LogLevel;
 use Redbitcz\Utils\IO\IOutStream;
 
 class Logger implements LoggerInterface
@@ -33,6 +32,11 @@ class Logger implements LoggerInterface
         );
     }
 
+    /**
+     * @param mixed $message
+     * @param mixed[] $context
+     * @return string
+     */
     private function interpolate($message, array $context = []): string
     {
         $replace = [];
