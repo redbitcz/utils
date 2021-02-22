@@ -4,15 +4,10 @@ declare(strict_types=1);
 
 namespace Redbitcz\Utils\IO;
 
-class ConsoleWriter implements IOutStream
+class ConsoleWriter extends FileWriter
 {
-    public function write(string $string): void
+    public function __construct()
     {
-        fwrite(STDOUT, $string);
-    }
-
-    public function error(string $string): void
-    {
-        fwrite(STDERR, $string);
+        parent::__construct(STDOUT, STDERR);
     }
 }
