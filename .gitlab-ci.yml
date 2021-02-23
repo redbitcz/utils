@@ -1,13 +1,58 @@
-deploy_composer_tag:
+stages:
+  - install
+  - tests
+  - deploy
+
+install:
+  stage: install
+  only:
+    - branches
+  image: redbitcz/gitlab-ci-php:7.4
+  cache:
+    key:
+      files:
+        - composer.json
+      prefix: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - composer.lock
+      - vendor/
+  artifacts:
+    untracked: true
+    paths:
+      - vendor/
+  script:
+    - composer install --optimize-autoloader
+
+tests:phpstan:
+  stage: tests
+  only:
+    - branches
+  image: redbitcz/gitlab-ci-php:7.4
+  dependencies:
+    - install
+  script:
+    - php -d memory_limit=512M vendor/bin/phpstan analyse src/ --level 6
+
+tests:nette_tester:
+  stage: tests
+  only:
+    - branches
+  image: redbitcz/gitlab-ci-php:7.4
+  dependencies:
+    - install
+  script:
+    - php -d memory_limit=512M vendor/bin/tester tests/
+
+deploy:composer:tag:
+  stage: deploy
   only:
     - tags
-  stage: deploy
   script:
     - curl -sS --show-error --fail --data tag=${CI_COMMIT_TAG} "https://__token__:${COMPOSER_DEPLOY_TOKEN}@gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/composer"
 
-deploy_composer_branch:
+deploy:composer:branch:
+  stage: deploy
   only:
     - branches
-  stage: deploy
   script:
     - curl -sS --show-error --fail --data branch=${CI_COMMIT_REF_NAME} "https://__token__:${COMPOSER_DEPLOY_TOKEN}@gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/composer"
