@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\IO;
 
-use Redbitcz\Utils\IO\FileWriter;
 use Tester\Assert;
 use Tester\TestCase;
-use Tests\FileUtils;
+use Tests\WriterMock;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
@@ -35,16 +34,13 @@ class FileWriterTest extends TestCase
      */
     public function testOutput(string $testData): void
     {
-        $outputStream = FileUtils::createMemoryStream();
-        $errorStream = FileUtils::createMemoryStream();
+        $mock = new WriterMock();
 
-        $writer = new FileWriter($outputStream, $errorStream);
+        $writer = $mock->getWriter();
         $writer->write($testData);
         $writer->error('noob');
 
-        $content = FileUtils::getStreamContent($outputStream);
-
-        Assert::equal($testData, $content);
+        Assert::equal($testData, $mock->getOutputStreamContent());
     }
 
     /**
@@ -53,16 +49,13 @@ class FileWriterTest extends TestCase
      */
     public function testError(string $testData): void
     {
-        $outputStream = FileUtils::createMemoryStream();
-        $errorStream = FileUtils::createMemoryStream();
+        $mock = new WriterMock();
 
-        $writer = new FileWriter($outputStream, $errorStream);
+        $writer = $mock->getWriter();
         $writer->write('noob');
         $writer->error($testData);
 
-        $content = FileUtils::getStreamContent($errorStream);
-
-        Assert::equal($testData, $content);
+        Assert::equal($testData, $mock->getErrorStreamContent());
     }
 }
 
