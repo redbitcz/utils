@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\IO;
 
-use Redbitcz\Utils\IO\FileWriter;
 use Redbitcz\Utils\IO\OutputWriter;
 use Tester\Assert;
 use Tester\TestCase;
