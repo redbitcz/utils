@@ -32,7 +32,7 @@
     }
   },
   "scripts": {
-    "phpstan": "phpstan analyze src/ --level 6",
+    "phpstan": "phpstan analyze src/ tests/ --level 6",
     "test": "tester tests/"
   }
 }
