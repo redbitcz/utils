@@ -31,7 +31,7 @@ tests:phpstan:
   dependencies:
     - install
   script:
-    - php -d memory_limit=512M vendor/bin/phpstan analyse src/ --level 6
+    - php -d memory_limit=512M vendor/bin/phpstan analyse src/ tests/ --level 6
 
 tests:nette_tester:
   stage: tests
