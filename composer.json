@@ -17,9 +17,22 @@
     "php": ">=7.3.0",
     "psr/log": "^1.1"
   },
+  "require-dev": {
+    "phpstan/phpstan": "^0.12.71",
+    "nette/tester": "^2.3"
+  },
   "autoload": {
     "psr-4": {
       "Redbitcz\\Utils\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "phpstan": "phpstan analyze src/ tests/ --level 6",
+    "test": "tester tests/"
   }
 }
