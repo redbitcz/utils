@@ -1,4 +1,5 @@
 <?php
+/** @testCase */
 
 declare(strict_types=1);
 
@@ -59,4 +60,4 @@ class OutputWriterTest extends TestCase
     }
 }
 
-(new FileWriterTest)->run();
+(new OutputWriterTest)->run();

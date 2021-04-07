@@ -1,11 +1,11 @@
 <?php
+/** @testCase */
 
 declare(strict_types=1);
 
 namespace Tests\Log;
 
 use Redbitcz\Utils\Log\Logger;
-use stdClass;
 use Tester\Assert;
 use Tester\TestCase;
 use Tests\WriterMock;
@@ -197,7 +197,7 @@ class LoggerTest extends TestCase
      */
     public function getTestInterpolationData(): array
     {
-        $interpolableClass = new class{
+        $interpolableClass = new class {
             public function __toString(): string
             {
                 return 'bar';
