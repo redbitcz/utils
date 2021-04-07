@@ -26,7 +26,8 @@ class HtmlOutputWriterTest extends TestCase
             ["", ""],
             ["\n", "<br />\n"],
             ["\n\n", "<br />\n<br />\n"],
-            ['&"\'<>', '&amp;&quot;\'&lt;&gt;']
+            ['&"\'<>', '&amp;&quot;\'&lt;&gt;'],
+            ['&amp;&quot;\'&lt;&gt;', '&amp;amp;&amp;quot;\'&amp;lt;&amp;gt;']
         ];
     }
 
