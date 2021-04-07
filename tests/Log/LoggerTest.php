@@ -1,4 +1,5 @@
 <?php
+/** @testCase */
 
 declare(strict_types=1);
 
@@ -196,7 +197,7 @@ class LoggerTest extends TestCase
      */
     public function getTestInterpolationData(): array
     {
-        $interpolableClass = new class{
+        $interpolableClass = new class {
             public function __toString(): string
             {
                 return 'bar';
