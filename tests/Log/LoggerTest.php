@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Log;
 
 use Redbitcz\Utils\Log\Logger;
-use stdClass;
 use Tester\Assert;
 use Tester\TestCase;
 use Tests\WriterMock;

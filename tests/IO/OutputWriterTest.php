@@ -59,4 +59,4 @@ class OutputWriterTest extends TestCase
     }
 }
 
-(new FileWriterTest)->run();
+(new OutputWriterTest)->run();
