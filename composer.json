@@ -21,6 +21,9 @@
     "phpstan/phpstan": "^0.12.71",
     "nette/tester": "^2.3"
   },
+  "suggest": {
+    "ext-pcntl": "Needed to support Unix-based process signals handling"
+  },
   "autoload": {
     "psr-4": {
       "Redbitcz\\Utils\\": "src/"
