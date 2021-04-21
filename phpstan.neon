@@ -1,0 +1,4 @@
+parameters:
+    excludes_analyse:
+        - 'tests/Pcntl/*' # because crashes PhpStan
+        - 'tests/Process/*' # because crashes PhpStan
