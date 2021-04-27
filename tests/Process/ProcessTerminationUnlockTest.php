@@ -2,7 +2,7 @@
 /**
  * @testCase
  * @phpExtension pcntl, posix
- * @exitCode -1
+ * @exitCode -1 // I have no idea why but it works
  * @noinspection PhpComposerExtensionStubsInspection
  */
 
@@ -20,11 +20,55 @@ class ProcessTerminationUnlockTest extends TestCase
 {
     public function testUnlock(): void
     {
-        ProcessTerminationLock::setSignalType(SIGTERM);
+        ProcessTerminationLock::setSignalTypes([SIGTERM]);
         ProcessTerminationLock::lock();
         ProcessTerminationLock::unlock(null, 10);
 
         posix_kill(posix_getpid(), SIGTERM);
+
+        Assert::fail("Expected exited process on previous line");
+    }
+
+    public function testMissed(): void
+    {
+        ProcessTerminationLock::setSignalTypes([SIGTERM]);
+        ProcessTerminationLock::lock();
+
+        posix_kill(posix_getpid(), SIGINT);
+
+        Assert::fail("Expected exited process on previous line");
+    }
+
+    public function testTwoSignalsAndUnlockFirstOne(): void
+    {
+        ProcessTerminationLock::setSignalTypes([SIGTERM, SIGINT]);
+        ProcessTerminationLock::lock();
+        ProcessTerminationLock::unlock(null, 10);
+
+        posix_kill(posix_getpid(), SIGTERM);
+
+        Assert::fail("Expected exited process on previous line");
+    }
+
+    public function testTwoSignalsAndUnlockSecondOne(): void
+    {
+        ProcessTerminationLock::setSignalTypes([SIGTERM, SIGINT]);
+        ProcessTerminationLock::lock();
+        ProcessTerminationLock::unlock(null, 10);
+
+        posix_kill(posix_getpid(), SIGINT);
+
+        Assert::fail("Expected exited process on previous line");
+    }
+
+
+    public function testTwoSignalsAndUnlockAnotherOne(): void
+    {
+        ProcessTerminationLock::setSignalTypes([SIGTERM, SIGHUP]);
+        ProcessTerminationLock::lock();
+        ProcessTerminationLock::unlock(null, 10);
+
+        posix_kill(posix_getpid(), SIGINT);
 
         Assert::fail("Expected exited process on previous line");
     }

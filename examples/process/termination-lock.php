@@ -14,7 +14,7 @@ if (ProcessTerminationLock::isAvailable() === false) {
      *
      * @noinspection PhpComposerExtensionStubsInspection (because Windows)
      */
-    ProcessTerminationLock::setSignalType(SIGINT);
+    ProcessTerminationLock::setSignalTypes([SIGINT]);
 }
 
 function announceSignal(): void

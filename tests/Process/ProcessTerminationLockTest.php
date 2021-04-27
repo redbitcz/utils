@@ -19,10 +19,30 @@ class ProcessTerminationLockTest extends TestCase
 {
     public function testLock(): void
     {
-        ProcessTerminationLock::setSignalType(SIGUSR1);
+        ProcessTerminationLock::setSignalTypes([SIGUSR1]);
         ProcessTerminationLock::lock();
 
         posix_kill(posix_getpid(), SIGUSR1);
+
+        ProcessTerminationLock::unlock(null, 10);
+    }
+
+    public function testTwoSignalsAndCallFirstOne(): void
+    {
+        ProcessTerminationLock::setSignalTypes([SIGUSR1, SIGUSR2]);
+        ProcessTerminationLock::lock();
+
+        posix_kill(posix_getpid(), SIGUSR1);
+
+        ProcessTerminationLock::unlock(null, 10);
+    }
+
+    public function testTwoSignalsAndCallSecondOne(): void
+    {
+        ProcessTerminationLock::setSignalTypes([SIGUSR1, SIGUSR2]);
+        ProcessTerminationLock::lock();
+
+        posix_kill(posix_getpid(), SIGUSR2);
 
         ProcessTerminationLock::unlock(null, 10);
     }

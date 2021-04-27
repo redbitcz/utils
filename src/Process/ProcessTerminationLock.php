@@ -8,27 +8,31 @@ namespace Redbitcz\Utils\Process;
 use Redbitcz\Utils\Pcntl\AsyncSignalsHandler;
 
 /**
- * SigIntLock provide lock to Unix-based process SIGTERM signal to prevent process unwanted termination
+ * ProcessTerminationLock provide lock to Unix-based process SIGTERM signal to prevent process unwanted termination
+ *
+ * SIGTERM signal can be changed to anothers through `setSignalTypes()` method
  *
  * When no PCNTL extension available in PHP, all methods do nothing
  */
 class ProcessTerminationLock
 {
-    /** @var int */
-    private static $signo = SIGTERM;
+    /** @var int[] */
+    private static $signo = [SIGTERM];
 
     /**
-     * Hold Unix-based process SIGTERM signal
+     * Hold Unix-based process SIGTERM signal (or others defined through `setSignalTypes()` method)
      *
      * @param callable|null $callback Optional. Called when signal received
      */
     public static function lock(?callable $callback = null): void
     {
-        AsyncSignalsHandler::register(self::$signo, $callback);
+        foreach (self::$signo as $signo) {
+            AsyncSignalsHandler::register($signo, $callback);
+        }
     }
 
     /**
-     * Release Unix-based process SIGTERM signal
+     * Release Unix-based process SIGTERM signal  (or others defined through `setSignalTypes()` method)
      *
      * When the SIGTERM sinal received during locked state, method exits the process now
      *
@@ -37,24 +41,26 @@ class ProcessTerminationLock
      */
     public static function unlock(?callable $callback = null, int $exitCode = 0): void
     {
-        AsyncSignalsHandler::deregister(self::$signo);
+        foreach (self::$signo as $signo) {
+            AsyncSignalsHandler::deregister($signo);
 
-        // Chech if exit signal received during lock, then exit process now
-        if (AsyncSignalsHandler::isSignalReceived(self::$signo)) {
-            if (is_callable($callback)) {
-                $callback();
+            // Chech if exit signal received during lock, then exit process now
+            if (AsyncSignalsHandler::isSignalReceived($signo)) {
+                if (is_callable($callback)) {
+                    $callback();
+                }
+
+                exit($exitCode);
             }
-
-            exit($exitCode);
         }
     }
 
     /**
-     * Set type of watched termination signal (default: SIGTERM)
+     * Set types of watched termination signal (default: SIGTERM)
      *
-     * @param int $signo
+     * @param int[] $signo
      */
-    public static function setSignalType(int $signo): void
+    public static function setSignalTypes(array $signo): void
     {
         self::$signo = $signo;
     }
