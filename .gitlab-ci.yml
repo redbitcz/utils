@@ -41,7 +41,7 @@ tests:nette_tester:
   dependencies:
     - install
   script:
-    - php -d memory_limit=512M vendor/bin/tester tests/
+    - php -d memory_limit=512M vendor/bin/tester tests/ -s
 
 deploy:composer:tag:
   stage: deploy
