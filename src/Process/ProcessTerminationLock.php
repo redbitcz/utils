@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Redbitcz\Utils\Process;
 
 use Redbitcz\Utils\Pcntl\AsyncSignalsHandler;
+use Redbitcz\Utils\Pcntl\Signals;
 
 /**
  * ProcessTerminationLock provide lock to Unix-based process SIGTERM signal to prevent process unwanted termination
@@ -16,8 +17,11 @@ use Redbitcz\Utils\Pcntl\AsyncSignalsHandler;
  */
 class ProcessTerminationLock
 {
-    /** @var int[] */
-    private static $signo = [SIGTERM];
+    /**
+     * @var int[]
+     * @see \Redbitcz\Utils\Pcntl\Signals constants
+     */
+    private static $signo = [Signals::SIGTERM];
 
     /**
      * Hold Unix-based process SIGTERM signal (or others defined through `setSignalTypes()` method)
@@ -57,8 +61,9 @@ class ProcessTerminationLock
 
     /**
      * Set types of watched termination signal (default: SIGTERM)
-     *
      * @param int[] $signo
+     *
+     * @see \Redbitcz\Utils\Pcntl\Signals constants
      */
     public static function setSignalTypes(array $signo): void
     {

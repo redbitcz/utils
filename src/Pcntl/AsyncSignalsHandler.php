@@ -18,7 +18,7 @@ class AsyncSignalsHandler
      *
      * When no PCNTL extension available in PHP, the method do nothing
      *
-     * @param int $signo The signal number, see `pcntl_signal()`
+     * @param int $signo The signal number, see `pcntl_signal()`, @see \Redbitcz\Utils\Pcntl\Signals constants
      * @param callable|null $callback Optional. Addidional callback, called when signal received
      */
     public static function register(int $signo, ?callable $callback = null): void
@@ -44,7 +44,7 @@ class AsyncSignalsHandler
      *
      * When no PCNTL extension available in PHP, the method do nothing
      *
-     * @param int $signo The signal number, see `pcntl_signal()`
+     * @param int $signo The signal number, see `pcntl_signal()`, @see \Redbitcz\Utils\Pcntl\Signals constants
      */
     public static function deregister(int $signo): void
     {
@@ -60,7 +60,7 @@ class AsyncSignalsHandler
     /**
      * Returns `true` when the handled signal was received from the moment the hadler is registered or state resetted
      *
-     * @param int $signo The signal number, see `pcntl_signal()`
+     * @param int $signo The signal number, see `pcntl_signal()`, @see \Redbitcz\Utils\Pcntl\Signals constants
      * @return bool
      */
     public static function isSignalReceived(int $signo): bool
@@ -81,7 +81,7 @@ class AsyncSignalsHandler
     /**
      * Removes previous received signal state
      *
-     * @param int $signo The signal number, see `pcntl_signal()`
+     * @param int $signo The signal number, see `pcntl_signal()`, @see \Redbitcz\Utils\Pcntl\Signals constants
      */
     public static function resetState(int $signo): void
     {
@@ -89,7 +89,7 @@ class AsyncSignalsHandler
     }
 
     /**
-     * @param int $signo The signal number, see `pcntl_signal()`
+     * @param int $signo The signal number, see `pcntl_signal()`, @see \Redbitcz\Utils\Pcntl\Signals constants
      */
     private static function handleSignal(int $signo): void
     {

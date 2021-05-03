@@ -36,6 +36,6 @@
   },
   "scripts": {
     "phpstan": "phpstan analyze src/ tests/ --level 6",
-    "test": "tester tests/"
+    "test": "tester tests/ -s"
   }
 }

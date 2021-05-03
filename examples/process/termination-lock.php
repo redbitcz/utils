@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
+use Redbitcz\Utils\Pcntl\Signals;
 use Redbitcz\Utils\Process\ProcessTerminationLock;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 if (ProcessTerminationLock::isAvailable() === false) {
     echo "WARNING: PHP doesn't implemented the PCNTL extensions, signal will be handled by system default handler! ";
-} else {
-    /**
-     * Watch to SIGINT signal for test with Ctrl-C, but default termination by SIGTERM
-     *
-     * @noinspection PhpComposerExtensionStubsInspection (because Windows)
-     */
-    ProcessTerminationLock::setSignalTypes([SIGINT]);
 }
+
+/**
+ * Watch to SIGINT signal for test with Ctrl-C, but default termination by SIGTERM
+ */
+ProcessTerminationLock::setSignalTypes([Signals::SIGINT]);
 
 function announceSignal(): void
 {
