@@ -1,5 +1,4 @@
 <?php
-/** @noinspection PhpComposerExtensionStubsInspection (because Windows) */
 
 declare(strict_types=1);
 
