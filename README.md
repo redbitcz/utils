@@ -53,7 +53,7 @@ Example:
 ```
 See [`Progress` example](examples/log/progress.php).
 
-## `ProcessTerminationLock`
+### `ProcessTerminationLock`
 
 The `\Redbitcz\Utils\Process\ProcessTerminationLock` class is simple mechanism how to prevent (rspt. delay) unexpected
 exit of PHP process during operation processing. It's recommended to workers to prevent break during processing a job
@@ -73,6 +73,54 @@ while(true) {
 }
 ```
 See [`ProcessTerminationLock` example](examples/process/termination-lock.php).
+
+### `BitwiseVariator`
+Classes in `\Redbitcz\Utils\Bitwise` namespace provides filtered bit variations generator over
+[Bitwise values](https://en.wikipedia.org/wiki/Bitwise_operation).
+
+That mean, when you have bits `1011`, variator generates all bits variations.
+
+```php
+$variations = BitwiseVariator::create(0b1011)->variate();
+```
+
+| Variation for bits `1011` |
+|--------------------------:|
+|                    `0000` |
+|                    `0001` |
+|                    `0010` |
+|                    `0011` |
+|                    `1000` |
+|                    `1001` |
+|                    `1010` |
+|                    `1011` |
+
+#### Filters
+
+`BitwiseVariator` class provide filter to select variations with(out) some bits only.
+
+```php
+$variations = BitwiseVariator::create(0b1011)->must(0b0010)->variate();
+```
+
+| Variation for bits `1011` with bite `0010` |
+|-------------------------------------------:|
+|                                     `0010` |
+|                                     `0011` |
+|                                     `1010` |
+|                                     `1011` |
+
+
+```php
+$variations = BitwiseVariator::create(0b1011)->mustNot(0b0010)->variate();
+```
+
+| Variation for bits `1011` without bite `0010` |
+|----------------------------------------------:|
+|                                        `0000` |
+|                                        `0001` |
+|                                        `1000` |
+|                                        `1001` |
 
 ## License
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
