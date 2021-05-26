@@ -2,3 +2,4 @@ parameters:
     excludes_analyse:
         - 'tests/Pcntl/*' # because crashes PhpStan
         - 'tests/Process/*' # because crashes PhpStan
+        - 'tests/Bitwise/*' # because test with too deep recurtion over data structures
