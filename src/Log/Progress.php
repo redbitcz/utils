@@ -22,23 +22,42 @@ class Progress
     /** @var int */
     private $step;
 
+    /** @var int */
+    private $strlenTotalSteps;
+
     public function __construct(LoggerInterface $logger, int $totalSteps)
     {
         $this->logger = $logger;
         $this->totalSteps = $totalSteps;
         $this->startTime = $this->lastTime = microtime(true);
         $this->step = 0;
+        $this->strlenTotalSteps = strlen((string)$totalSteps);
     }
 
-    public function step(?string $text = null): void
+    public function step(?string $text = null, ?string $prefix = null): void
     {
         $this->step++;
         $this->logger->debug(
             sprintf(
-                '%s step %' . strlen((string)$this->totalSteps) . 'd/%d: %s',
+                '%s%s %' . $this->strlenTotalSteps . 'd/%d: %s',
+                $prefix ?? '',
                 $this->getTimeAsString(),
                 $this->step,
                 $this->totalSteps,
+                $text ?? '-'
+            )
+        );
+    }
+
+    public function stepInStep(?string $text = null, ?string $prefix = null, int $deep = 1): void
+    {
+        $this->logger->debug(
+            sprintf(
+                '%s%s%s%s ╰→ %s',
+                $prefix ?? '',
+                $this->getTimeAsString(),
+                str_repeat(' ', ($this->strlenTotalSteps * 2)),
+                str_repeat(' ', $deep * 3),
                 $text ?? '-'
             )
         );
