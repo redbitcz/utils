@@ -18,6 +18,48 @@ related method call will be siletly ignored.
 
 ## Usage
 
+### `Locker`
+
+The `\Redbitcz\Utils\Lock\Locker` class is simple implementation of lock/semaphor based of filelock. It's optimized for
+Linux architecture. 
+
+Locker support two modes:
+
+ - **Blocking mode** – Blocking mode is create semaphor for locked space, all concurrent locks will **wait to release
+    previous lock**. Be careful, it may cause to deadlock of PHP processes, because lock at filesystem is not subject of
+    [`max_execution_time`](https://www.php.net/manual/en/info.configuration.php#ini.max-execution-time) limit!
+ - **Non blocking mode** – Non blocking mode is create lock which is prevent access concurrent processes to locked stage. 
+    All concurent locks **will imediatelly fails** with `LockObtainException` Exception.
+
+Example non-blocking lock: 
+
+```php
+    $locker = new Locker(__DIR__, 'example', Locker::NON_BLOCKING);
+    
+    try {
+        $locker->lock();
+        
+        // ... exclusive operation
+        
+        $locker->unlock();
+    }
+    catch (LockObtainException $e) {
+        die('Error: Another process is alreasy processing that stuff');
+    }
+```
+
+Example blocking lock:
+
+```php
+    $locker = new Locker(__DIR__, 'example', Locker::BLOCKING);
+    
+    $locker->lock(); // concurrent process will be wait here to release previous lock
+    
+    // ... exclusive operation
+    
+    $locker->unlock();
+```
+
 ### `Logger`
 
 The `\Redbitcz\Utils\Log\Logger` class is implementation of PSR-3 logger interface and it decorates each
