@@ -18,7 +18,8 @@ class SectionLoggerTest extends TestCase
     {
         $mock = new WriterMock();
 
-        $logger = (new Logger($mock->getWriter()))->section('foo');
+        $logger = (new Logger($mock->getWriter()))
+            ->section('foo');
 
         $logger->log('testSection', 'bar');
 
@@ -31,7 +32,9 @@ class SectionLoggerTest extends TestCase
     {
         $mock = new WriterMock();
 
-        $logger = (new Logger($mock->getWriter()))->section('foo')->section('bar');
+        $logger = (new Logger($mock->getWriter()))
+            ->section('foo')
+            ->section('bar');
 
         $logger->log('testSection', 'baz');
 
@@ -44,28 +47,49 @@ class SectionLoggerTest extends TestCase
     {
         $mock = new WriterMock();
 
-        $logger = (new Logger($mock->getWriter()))->section('foo', ' > ')->section('bar');
+        $logger = (new Logger($mock->getWriter()))
+            ->section('foo', ' > ')
+            ->section('bar')
+            ->section('foobar');
 
         $logger->log('testSection', 'baz');
 
         $output = $mock->getOutputStreamContent();
 
-        Assert::match('~^\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] TESTSECTION: \\{foo > bar\\} baz$~', $output);
+        Assert::match('~^\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] TESTSECTION: \\{foo > bar > foobar\\} baz$~', $output);
     }
 
     public function testSubSectionSubSeparator(): void
     {
         $mock = new WriterMock();
 
-        $logger = (new Logger($mock->getWriter()))->section('foo')->section('bar', ' > ');
+        $logger = (new Logger($mock->getWriter()))
+            ->section('foo')
+            ->section('bar', ' > ')
+            ->section('foobar');
 
         $logger->log('testSection', 'baz');
 
         $output = $mock->getOutputStreamContent();
 
-        Assert::match('~^\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] TESTSECTION: \\{foo > bar\\} baz$~', $output);
+        Assert::match('~^\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] TESTSECTION: \\{foo > bar > foobar\\} baz$~', $output);
     }
 
+    public function testSubSectionLastSeparator(): void
+    {
+        $mock = new WriterMock();
+
+        $logger = (new Logger($mock->getWriter()))
+            ->section('foo')
+            ->section('bar')
+            ->section('foobar', ' > ');
+
+        $logger->log('testSection', 'baz');
+
+        $output = $mock->getOutputStreamContent();
+
+        Assert::match('~^\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] TESTSECTION: \\{foo/bar > foobar\\} baz$~', $output);
+    }
 }
 
 (new SectionLoggerTest)->run();

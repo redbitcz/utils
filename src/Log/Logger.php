@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Redbitcz\Utils\IO\IOutStream;
 
-class Logger implements LoggerInterface
+class Logger implements LoggerInterface, SectionLoggerInterface
 {
     use LoggerTrait;
 
@@ -32,7 +32,7 @@ class Logger implements LoggerInterface
         );
     }
 
-    public function section(string $section, string $separator = '/'): SectionLogger
+    public function section(string $section, string $separator = '/'): SectionLoggerInterface
     {
         return new SectionLogger($this->writer, $section, $separator);
     }

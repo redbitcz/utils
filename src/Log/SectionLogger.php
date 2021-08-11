@@ -34,7 +34,7 @@ class SectionLogger extends Logger
         );
     }
 
-    public function section(string $section, string $separator = null): SectionLogger
+    public function section(string $section, string $separator = null): SectionLoggerInterface
     {
         $separator = $separator ?? $this->separator;
         $section = $this->section . $separator . $section;
