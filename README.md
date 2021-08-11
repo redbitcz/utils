@@ -40,10 +40,18 @@ Example:
 ```php
 $logger->info("Processing message: $messageId");
 
-$sectionLogger = $logger->section($messageId);
-$sectionLogger->info('Open');
-$sectionLogger->info('Parse');
-$sectionLogger->info('Save');
+$messageLogger = $logger->section($messageId);
+$messageLogger->info('Open');
+
+function parse(LoggerInterface $parserLogger) {
+    $parserLogger->info('Parsing...');
+    // ...
+    $parserLogger->info('Parsing OK');
+}
+
+parse($messageLogger->section('parser'));
+
+$messageLogger->info('Save');
 
 $logger->info('Done');
 ```
@@ -52,7 +60,8 @@ Sends to output:
 ```
 [2021-05-05 11:49:36] INFO: Processing message: 123456789
 [2021-05-05 11:49:37] INFO: {123456789} Open
-[2021-05-05 11:49:38] INFO: {123456789} Parse
+[2021-05-05 11:49:38] INFO: {123456789/parser} Parsing...
+[2021-05-05 11:49:38] INFO: {123456789/parser} Parsing OK
 [2021-05-05 11:49:38] INFO: {123456789} Save
 [2021-05-05 11:49:36] INFO: Done
 ```
