@@ -25,13 +25,48 @@ logger record with time and log severity name.
 
 Example:
 ```
-[2021-05-05 11:49:36] Logged message 1
-[2021-05-05 11:49:38] Another logged message
+[2021-05-05 11:49:36] INFO: Logged message 1
+[2021-05-05 11:49:38] DEBUG: Another logged message
 ```
 
 Logger requires Writer `\Redbitcz\Utils\IO\IOutStream` instance. Package contains few several types
 of Writer implementations which are different by the log target (console, general output, standard output, HTML output,
 or file).
+
+Logger also support sectionalization for long-processing operations:
+
+Example:
+
+```php
+$logger->info("Processing message: $messageId");
+
+$messageLogger = $logger->section($messageId);
+$messageLogger->info('Open');
+
+function parse(LoggerInterface $parserLogger) {
+    $parserLogger->info('Parsing...');
+    // ...
+    $parserLogger->info('Parsing OK');
+}
+
+parse($messageLogger->section('parser'));
+
+$messageLogger->info('Save');
+
+$logger->info('Done');
+```
+
+Sends to output:
+```
+[2021-05-05 11:49:36] INFO: Processing message: 123456789
+[2021-05-05 11:49:37] INFO: {123456789} Open
+[2021-05-05 11:49:38] INFO: {123456789/parser} Parsing...
+[2021-05-05 11:49:38] INFO: {123456789/parser} Parsing OK
+[2021-05-05 11:49:38] INFO: {123456789} Save
+[2021-05-05 11:49:36] INFO: Done
+```
+
+Section is useful to provide logger to another service which is requested to process single entity.
 
 See [`Logger` example](examples/log/output-logger.php).
 
