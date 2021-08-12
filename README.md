@@ -48,6 +48,8 @@ Example non-blocking lock:
     }
 ```
 
+See [Non-blocking `Locker` example](examples/lock/non-blocking-locker.php).
+
 Example blocking lock:
 
 ```php
@@ -59,6 +61,8 @@ Example blocking lock:
     
     $locker->unlock();
 ```
+
+See [Blocking `Locker` example](examples/lock/blocking-locker.php).
 
 ### `Logger`
 
