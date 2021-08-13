@@ -8,12 +8,12 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Redbitcz\Utils\IO\IOutStream;
 
-class Logger implements LoggerInterface
+class Logger implements LoggerInterface, SectionLoggerInterface
 {
     use LoggerTrait;
 
     /** @var IOutStream */
-    private $writer;
+    protected $writer;
 
     public function __construct(IOutStream $writer)
     {
@@ -32,12 +32,17 @@ class Logger implements LoggerInterface
         );
     }
 
+    public function section(string $section, string $separator = '/'): SectionLoggerInterface
+    {
+        return new SectionLogger($this->writer, $section, $separator);
+    }
+
     /**
      * @param mixed $message
      * @param mixed[] $context
      * @return string
      */
-    private function interpolate($message, array $context = []): string
+    protected function interpolate($message, array $context = []): string
     {
         $replace = [];
         foreach ($context as $key => $value) {
