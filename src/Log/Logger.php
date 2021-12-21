@@ -30,7 +30,7 @@ class Logger implements LoggerInterface, SectionLoggerInterface
             strtoupper((string)$level),
             $this->interpolate($message, $context)
         );
-        if ($level === LogLevel::ERROR) {
+        if (in_array($level, [LogLevel::ERROR, LogLevel::CRITICAL, LogLevel::ALERT, LogLevel::EMERGENCY], true)) {
             $this->writer->error($text);
         } else {
             $this->writer->write($text);
