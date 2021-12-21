@@ -6,6 +6,7 @@ namespace Redbitcz\Utils\Log;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
+use Psr\Log\LogLevel;
 use Redbitcz\Utils\IO\IOutStream;
 
 class Logger implements LoggerInterface, SectionLoggerInterface
@@ -23,14 +24,17 @@ class Logger implements LoggerInterface, SectionLoggerInterface
 
     public function log($level, $message, array $context = []): void
     {
-        $this->writer->write(
-            sprintf(
-                "[%s] %s: %s\n",
-                date('Y-m-d H:i:s'),
-                strtoupper((string)$level),
-                $this->interpolate($message, $context)
-            )
+        $text = sprintf(
+            "[%s] %s: %s\n",
+            date('Y-m-d H:i:s'),
+            strtoupper((string)$level),
+            $this->interpolate($message, $context)
         );
+        if ($level === LogLevel::ERROR) {
+            $this->writer->error($text);
+        } else {
+            $this->writer->write($text);
+        }
     }
 
     public function section(string $section, string $separator = '/'): SectionLoggerInterface
