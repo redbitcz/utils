@@ -6,7 +6,6 @@ namespace Redbitcz\Utils\Log;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
-use Psr\Log\LogLevel;
 use Redbitcz\Utils\IO\IOutStream;
 
 class Logger implements LoggerInterface, SectionLoggerInterface
@@ -16,6 +15,8 @@ class Logger implements LoggerInterface, SectionLoggerInterface
 
     /** @var IOutStream */
     protected $writer;
+    /** @var array<string, bool> */
+    protected $errorLevels = [];
 
     public function __construct(IOutStream $writer)
     {
@@ -24,17 +25,33 @@ class Logger implements LoggerInterface, SectionLoggerInterface
 
     public function log($level, $message, array $context = []): void
     {
-        $text = sprintf(
+        $interpolatedMessage = sprintf(
             "[%s] %s: %s\n",
             date('Y-m-d H:i:s'),
             strtoupper((string)$level),
             $this->interpolate($message, $context)
         );
-        if (in_array($level, [LogLevel::ERROR, LogLevel::CRITICAL, LogLevel::ALERT, LogLevel::EMERGENCY], true)) {
-            $this->writer->error($text);
+        if (isset($this->errorLevels[$level])) {
+            $this->writer->error($interpolatedMessage);
         } else {
-            $this->writer->write($text);
+            $this->writer->write($interpolatedMessage);
         }
+    }
+
+    /**
+     * @param string[] $levels
+     */
+    public function setErrorLevels(array $levels): void
+    {
+        $this->errorLevels = [];
+        foreach ($levels as $level) {
+            $this->addErrorLevel($level);
+        }
+    }
+
+    public function addErrorLevel(string $level): void
+    {
+        $this->errorLevels[$level] = true;
     }
 
     public function section(string $section, string $separator = '/'): SectionLoggerInterface
