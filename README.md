@@ -203,6 +203,12 @@ $variations = BitwiseVariator::create(0b1011)->mustNot(0b0010)->variate();
 |                                        `1000` |
 |                                        `1001` |
 
+Be aware to use more than 8 variated bits, because it proceed huge of variants:
+
+![Table with count of variants for every variated bits](https://user-images.githubusercontent.com/1657322/153865836-174cbe67-3216-4e47-954b-bec50e8d2c26.png)
+
+(source: [Spreadseed Bitwise Variator counts](https://drive.google.com/open?id=1J4M0PyoQFTDgKk84fVjzhtil_Af0_gVZX0BdPlD5uFg))
+
 ## License
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
 
