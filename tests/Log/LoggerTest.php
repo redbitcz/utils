@@ -193,6 +193,28 @@ class LoggerTest extends TestCase
     }
 
     /**
+     * @dataProvider getTestLogData
+     * @param string $testData
+     */
+    public function testCorrectOutput(string $testData): void
+    {
+        $mock = new WriterMock();
+
+        $logger = new Logger($mock->getWriter(), Logger::STANDARD_ERROR_LEVELS);
+
+        $logger->info($testData);
+        $logger->error($testData);
+
+        $outputContent = $mock->getOutputStreamContent();
+        $errorContent = $mock->getErrorStreamContent();
+
+        Assert::match('~^\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] INFO:~', $outputContent);
+        Assert::match('~^\\[\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\] ERROR:~', $errorContent);
+        Assert::contains($testData . "\n", $outputContent);
+        Assert::contains($testData . "\n", $errorContent);
+    }
+
+    /**
      * @return array[]
      */
     public function getTestInterpolationData(): array
