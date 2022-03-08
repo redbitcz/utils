@@ -7,7 +7,7 @@ namespace Redbitcz\Utils\IO;
 
 use RuntimeException;
 
-class WriterMock
+class BufferWriter implements IOutStream
 {
     /** @var resource */
     private $outputStream;
@@ -26,12 +26,14 @@ class WriterMock
         $this->writer = new FileWriter($this->outputStream, $this->errorStream);
     }
 
-    /**
-     * @return resource
-     */
-    public function getOutputStream()
+    public function write(string $string): void
     {
-        return $this->outputStream;
+        $this->writer->write($string);
+    }
+
+    public function error(string $string): void
+    {
+        $this->writer->error($string);
     }
 
     public function getOutputStreamContent(): string
@@ -39,22 +41,9 @@ class WriterMock
         return self::getStreamContent($this->outputStream);
     }
 
-    /**
-     * @return resource
-     */
-    public function getErrorStream()
-    {
-        return $this->errorStream;
-    }
-
     public function getErrorStreamContent(): string
     {
         return self::getStreamContent($this->errorStream);
-    }
-
-    public function getWriter(): FileWriter
-    {
-        return $this->writer;
     }
 
     /**
