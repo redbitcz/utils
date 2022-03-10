@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Redbitcz\Utils\IO;
 
-
 use RuntimeException;
 
 class BufferWriter implements IOutStream
@@ -24,6 +23,12 @@ class BufferWriter implements IOutStream
         $this->errorStream = self::createMemoryStream();
 
         $this->writer = new FileWriter($this->outputStream, $this->errorStream);
+    }
+
+    public function __destruct()
+    {
+        fclose($this->outputStream);
+        fclose($this->errorStream);
     }
 
     public function write(string $string): void
@@ -53,7 +58,9 @@ class BufferWriter implements IOutStream
     {
         $fileHandler = fopen('php://memory', 'wb+');
 
-        self::validateResource($fileHandler);
+        if($fileHandler === false) {
+            throw new RuntimeException("Unable to create Memory stream (php://memory)");
+        }
 
         return $fileHandler;
     }
@@ -64,19 +71,6 @@ class BufferWriter implements IOutStream
      */
     private static function getStreamContent($fileHandler): string
     {
-        self::validateResource($fileHandler);
-
         return stream_get_contents($fileHandler, -1, 0);
-    }
-
-    /**
-     * @param resource|mixed $fileHandler
-     */
-    private static function validateResource($fileHandler): void
-    {
-        if (is_resource($fileHandler) === false) {
-            $type = gettype($fileHandler);
-            throw new RuntimeException("File handler in test is invalid, resource type required, {$type} instead");
-        }
     }
 }
