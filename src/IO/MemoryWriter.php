@@ -15,7 +15,7 @@ class MemoryWriter implements IBufferWriter
     /** @var resource|null */
     private $errorStream;
 
-    /** @var FileWriter */
+    /** @var LazyStreamWriter */
     private $writer;
 
     public function __construct()
@@ -47,11 +47,17 @@ class MemoryWriter implements IBufferWriter
         $this->writer->error($string);
     }
 
+    /**
+     * @return resource
+     */
     private function createOutputStream()
     {
         return $this->outputStream = $this->createMemoryStream();
     }
 
+    /**
+     * @return resource
+     */
     private function createErrorStream()
     {
         return $this->errorStream = $this->createMemoryStream();

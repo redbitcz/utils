@@ -48,6 +48,9 @@ class LazyStreamWriter implements IOutStream
         fwrite($this->errorStream, $string);
     }
 
+    /**
+     * @return resource
+     */
     private function createStream(callable $factory)
     {
         $stream = $factory();
