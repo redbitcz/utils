@@ -58,4 +58,4 @@ class BufferWriterTest extends TestCase
     }
 }
 
-(new FileWriterTest)->run();
+(new BufferWriterTest)->run();
