@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Redbitcz\Utils\IO;
 
+use Closure;
 use RuntimeException;
 
 class MemoryWriter implements IBufferWriter
 {
-    /** @var resource */
+    /** @var resource|null */
     private $outputStream;
 
-    /** @var resource */
+    /** @var resource|null */
     private $errorStream;
 
     /** @var FileWriter */
@@ -19,16 +20,21 @@ class MemoryWriter implements IBufferWriter
 
     public function __construct()
     {
-        $this->outputStream = self::createMemoryStream();
-        $this->errorStream = self::createMemoryStream();
-
-        $this->writer = new FileWriter($this->outputStream, $this->errorStream);
+        $this->writer = new LazyStreamWriter(
+            Closure::fromCallable([$this, 'createOutputStream']),
+            Closure::fromCallable([$this, 'createErrorStream']),
+        );
     }
 
     public function __destruct()
     {
-        fclose($this->outputStream);
-        fclose($this->errorStream);
+        if ($this->hasOutputContent()) {
+            fclose($this->outputStream);
+        }
+
+        if ($this->hasErrorContent()) {
+            fclose($this->errorStream);
+        }
     }
 
     public function write(string $string): void
@@ -41,24 +47,44 @@ class MemoryWriter implements IBufferWriter
         $this->writer->error($string);
     }
 
+    private function createOutputStream()
+    {
+        return $this->outputStream = $this->createMemoryStream();
+    }
+
+    private function createErrorStream()
+    {
+        return $this->errorStream = $this->createMemoryStream();
+    }
+
+    public function hasOutputContent(): bool
+    {
+        return isset($this->outputStream);
+    }
+
     public function getOutputContent(): string
     {
-        return self::getStreamContent($this->outputStream);
+        return $this->hasOutputContent() ? $this->getStreamContent($this->outputStream) : '';
+    }
+
+    public function hasErrorContent(): bool
+    {
+        return isset($this->errorStream);
     }
 
     public function getErrorContent(): string
     {
-        return self::getStreamContent($this->errorStream);
+        return $this->hasErrorContent() ? $this->getStreamContent($this->errorStream) : '';
     }
 
     /**
      * @return resource
      */
-    private static function createMemoryStream()
+    private function createMemoryStream()
     {
         $fileHandler = fopen('php://memory', 'wb+');
 
-        if($fileHandler === false) {
+        if ($fileHandler === false) {
             throw new RuntimeException("Unable to create Memory stream (php://memory)");
         }
 
@@ -69,7 +95,7 @@ class MemoryWriter implements IBufferWriter
      * @param resource $fileHandler
      * @return string
      */
-    private static function getStreamContent($fileHandler): string
+    private function getStreamContent($fileHandler): string
     {
         return stream_get_contents($fileHandler, -1, 0);
     }

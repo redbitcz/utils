@@ -41,6 +41,7 @@ class MemoryWriterTest extends TestCase
         $writer->error('noob');
 
         Assert::equal($testData, $writer->getOutputContent());
+        Assert::equal('noob', $writer->getErrorContent());
     }
 
     /**
@@ -54,7 +55,30 @@ class MemoryWriterTest extends TestCase
         $writer->write('noob');
         $writer->error($testData);
 
+        Assert::equal('noob', $writer->getOutputContent());
         Assert::equal($testData, $writer->getErrorContent());
+    }
+
+    public function testEmpty(): void
+    {
+        $writer = new MemoryWriter();
+
+        Assert::equal('', $writer->getOutputContent());
+        Assert::equal('', $writer->getErrorContent());
+    }
+
+    public function testHasContent(): void
+    {
+        $writer = new MemoryWriter();
+
+        Assert::equal(false, $writer->hasOutputContent());
+        Assert::equal(false, $writer->hasErrorContent());
+
+        $writer->write('foo');
+        $writer->error('bar');
+
+        Assert::equal(true, $writer->hasOutputContent());
+        Assert::equal(true, $writer->hasErrorContent());
     }
 }
 
