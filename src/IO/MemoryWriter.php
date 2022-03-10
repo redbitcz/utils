@@ -6,7 +6,7 @@ namespace Redbitcz\Utils\IO;
 
 use RuntimeException;
 
-class BufferWriter implements IOutStream
+class MemoryWriter implements IBufferWriter
 {
     /** @var resource */
     private $outputStream;
@@ -41,12 +41,12 @@ class BufferWriter implements IOutStream
         $this->writer->error($string);
     }
 
-    public function getOutputStreamContent(): string
+    public function getOutputContent(): string
     {
         return self::getStreamContent($this->outputStream);
     }
 
-    public function getErrorStreamContent(): string
+    public function getErrorContent(): string
     {
         return self::getStreamContent($this->errorStream);
     }

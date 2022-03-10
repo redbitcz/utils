@@ -5,13 +5,13 @@ declare(strict_types=1);
 
 namespace Tests\IO;
 
-use Redbitcz\Utils\IO\BufferWriter;
+use Redbitcz\Utils\IO\MemoryWriter;
 use Tester\Assert;
 use Tester\TestCase;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-class BufferWriterTest extends TestCase
+class MemoryWriterTest extends TestCase
 {
     /**
      * @return string[][]
@@ -35,12 +35,12 @@ class BufferWriterTest extends TestCase
      */
     public function testOutput(string $testData): void
     {
-        $writer = new BufferWriter();
+        $writer = new MemoryWriter();
 
         $writer->write($testData);
         $writer->error('noob');
 
-        Assert::equal($testData, $writer->getOutputStreamContent());
+        Assert::equal($testData, $writer->getOutputContent());
     }
 
     /**
@@ -49,13 +49,13 @@ class BufferWriterTest extends TestCase
      */
     public function testError(string $testData): void
     {
-        $writer = new BufferWriter();
+        $writer = new MemoryWriter();
 
         $writer->write('noob');
         $writer->error($testData);
 
-        Assert::equal($testData, $writer->getErrorStreamContent());
+        Assert::equal($testData, $writer->getErrorContent());
     }
 }
 
-(new BufferWriterTest)->run();
+(new MemoryWriterTest)->run();
